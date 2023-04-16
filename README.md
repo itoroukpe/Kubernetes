@@ -13,6 +13,28 @@ Kubernetes Advanced Topics:
 
 # Introduction to Kubernetes:
 - ## Overview of Kubernetes architecture
+Kubernetes is a container orchestration platform that automates the deployment, scaling, and management of containerized applications. At a high level, the Kubernetes architecture consists of a control plane and a set of worker nodes.
+
+The control plane is responsible for managing the overall state of the Kubernetes cluster. It includes several components:
+
+- etcd: A distributed key-value store that stores the configuration and state of the Kubernetes cluster.
+
+- kube-apiserver: The front-end API server that provides a RESTful API to the Kubernetes control plane. It validates and configures data for the API objects, and also serves as the gateway to the etcd datastore.
+
+- kube-controller-manager: A set of controllers that manage the overall state of the cluster by reconciling the desired state with the actual state of the cluster. Examples of controllers include the node controller, which monitors the health of nodes, and the replica set controller, which ensures that the correct number of replicas of a pod are running.
+
+- kube-scheduler: The component that schedules pods to run on the worker nodes. It takes into account factors such as resource requirements, node capacity, and affinity/anti-affinity rules.
+
+The worker nodes are responsible for running the containerized applications. They include several components:
+
+- kubelet: The primary node agent that communicates with the kube-apiserver to receive instructions on what pods to run and how to configure them. It is responsible for running the containers and reporting back to the kube-apiserver on their status.
+
+- kube-proxy: A network proxy that runs on each node and forwards traffic to the appropriate pod. It also implements the Kubernetes service concept, which provides a stable IP address and DNS name for a set of pods.
+
+- Container runtime: The software responsible for running the containers, such as Docker or containerd.
+
+In addition to these core components, Kubernetes supports a wide range of add-ons and extensions, such as the Kubernetes Dashboard for monitoring and managing the cluster, and the Prometheus monitoring system for collecting and analyzing metrics.
+
 - ## Kubernetes vs traditional infrastructure management
 - ## Installation and setup of Kubernetes cluster
 # Kubernetes Components:
