@@ -85,6 +85,37 @@ Here are the steps involved in using StatefulSets for database deployments:
 
 - Create the Persistent Volume Claims: Next, you need to create the Persistent Volume Claims (PVCs) for the StatefulSet. PVCs ensure that each pod in the set has its own persistent volume that is mounted to the same path. This ensures that the database's data is stored on the same volume, providing consistency and durability.
 
+To create a Persistent Volume Claim (PVC), you can follow these steps:
+
+Define your storage requirements in a YAML file. Here's an example:
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+```
+In this example, we are creating a PVC called my-pvc that requires 1GB of storage and will be mounted with ReadWriteOnce access mode.
+
+Apply the YAML file to create the PVC:
+```
+kubectl apply -f my-pvc.yaml
+```
+This will create a new PVC called my-pvc.
+
+Verify that the PVC has been created:
+```
+kubectl get pvc
+```
+This will display a list of all PVCs in the current namespace. You should see my-pvc in the list.
+
+Once you have created your PVC, you can use it to request storage from a Persistent Volume (PV) that meets the specified requirements.
+
 - Deploy the StatefulSet: Once the StatefulSet and PVCs are defined, you can deploy the StatefulSet using kubectl apply command.
 
 - Connect to the database: Once the StatefulSet is deployed, you can connect to the database using the service that is defined in the StatefulSet manifest. You can use the DNS name or IP address of the service to connect to the database.
