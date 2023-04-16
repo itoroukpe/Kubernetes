@@ -869,3 +869,113 @@ func handleTask(event sdk.Event) error {
 
 This curriculum covers the basics of Kubernetes, including key components, pods, services, deployments, and persistent storage. It also includes more advanced topics such as monitoring, security, and Kubernetes extensions. As you progress through the curriculum, you'll gain a deep understanding of how to manage containerized applications with Kubernetes.
 
+# Kubernetes Interview Questions
+Here are some interview questions related to Kubernetes:
+
+## What is Kubernetes and what problem does it solve?
+## What are the main components of a Kubernetes cluster?
+## What is the difference between a pod and a container in Kubernetes?
+## What is a Kubernetes deployment, and how does it work?
+## How does Kubernetes handle scaling and load balancing?
+## What is a Kubernetes service, and how does it work?
+## What is a Kubernetes namespace, and how is it used?
+## How does Kubernetes handle storage, and what types of storage are available?
+## How does Kubernetes handle security, and what are some best practices for securing a Kubernetes cluster?
+## What are Kubernetes operators, and how are they used?
+## What are Custom Resource Definitions (CRDs), and how are they used?
+## How does Kubernetes handle rolling updates and rollbacks?
+## What are some common Kubernetes networking issues, and how can they be resolved?
+## What tools and frameworks do you use to deploy, manage and monitor Kubernetes clusters?
+## How would you troubleshoot a Kubernetes cluster that is experiencing performance issues or downtime?
+## What are some common Kubernetes deployment patterns, and when would you use them?
+## What are the benefits of using Kubernetes in a containerized environment?
+## What is Helm, and how is it used with Kubernetes?
+## What is the difference between a stateful set and a deployment in Kubernetes?
+## How do you monitor and debug Kubernetes clusters?
+
+# ANSWERS
+## What is Kubernetes and what problem does it solve?
+Kubernetes is an open-source platform that automates the deployment, scaling, and management of containerized applications. It was originally developed by Google and is now maintained by the Cloud Native Computing Foundation (CNCF).
+
+Kubernetes solves several problems related to deploying and managing containerized applications at scale. Some of these problems include:
+
+- Container orchestration: Kubernetes automates the deployment and management of containers, making it easier to run and scale applications in a containerized environment.
+
+- Service discovery and load balancing: Kubernetes provides a built-in service discovery mechanism that allows applications to communicate with each other, and a load balancing feature that distributes network traffic across multiple instances of an application.
+
+- Storage management: Kubernetes provides several mechanisms for managing storage, such as persistent volumes and storage classes, making it easier to store and manage data in a containerized environment.
+
+- Rolling updates and rollbacks: Kubernetes makes it easy to perform rolling updates and rollbacks of application versions, ensuring that there is minimal downtime during the upgrade process.
+
+- Scaling and resource management: Kubernetes provides mechanisms for scaling applications up and down based on demand, and for managing resource utilization to ensure that applications have the resources they need to run effectively.
+
+Overall, Kubernetes provides a powerful and flexible platform for managing containerized applications, allowing organizations to deploy and manage their applications at scale with greater efficiency and reliability.
+
+## What are the main components of a Kubernetes cluster?
+The main components of a Kubernetes cluster are:
+
+- Control Plane: The control plane is responsible for managing the overall state of the cluster. It includes several components that manage the deployment, scaling, and maintenance of applications running in the cluster, including:
+- API Server: The API server provides the REST API for managing the cluster.
+etcd: A distributed key-value store that stores the configuration data for the cluster.
+- Scheduler: The scheduler assigns pods to nodes based on resource availability and other constraints.
+- Controller Manager: The controller manager manages the various controllers that are responsible for maintaining the desired state of the cluster.
+- Nodes: Nodes are the worker machines that run containerized applications. Each node runs several Kubernetes components, including:
+- Kubelet: The kubelet is responsible for communicating with the API server and ensuring that containers are running on the node as expected.
+- kube-proxy: The kube-proxy is responsible for routing network traffic to the appropriate pods.
+- Container runtime: The container runtime is responsible for running the containers on the node, such as Docker or CRI-O.
+- Networking: Networking is an important component of a Kubernetes cluster, as it enables communication between pods and nodes. Kubernetes supports several networking plugins, such as Calico and Flannel, that provide different networking capabilities.
+
+- Add-ons: Add-ons are optional components that can be added to a Kubernetes cluster to provide additional functionality, such as monitoring and logging. Some examples of add-ons include the Kubernetes Dashboard, Prometheus, and Fluentd.
+
+## What is the difference between a pod and a container in Kubernetes?
+In Kubernetes, a container is a lightweight, standalone executable package of software that includes everything needed to run an application, including code, libraries, and system tools. A container runs on a host machine and provides a consistent runtime environment that can be easily moved between different environments.
+
+A pod, on the other hand, is the smallest and simplest unit in the Kubernetes object model. A pod is a logical host for one or more containers, and it provides a shared network namespace and filesystem for the containers within it. In other words, a pod is a way to group one or more containers that need to be deployed and scaled together.
+
+Here are some key differences between a pod and a container in Kubernetes:
+
+- A container is an isolated process running on a host machine, while a pod is a group of one or more containers that share the same network and storage resources.
+- Containers are typically used to run individual applications, while pods are used to group and manage related containers.
+- Containers can be independently scaled and managed, while pods are scaled and managed as a unit.
+- Containers communicate with each other over a network, while containers within a pod can communicate with each other using localhost.
+
+Overall, containers and pods are both important concepts in Kubernetes, and they are often used together to provide a flexible and scalable environment for running containerized applications.
+
+## What is a Kubernetes deployment, and how does it work?
+In Kubernetes, a deployment is a high-level object that provides declarative updates for a set of replicas of a particular application. A deployment ensures that the specified number of replicas are running and can handle rolling updates and rollbacks of application versions with minimal downtime.
+
+Here's how a Kubernetes deployment works:
+
+- A deployment is created with a desired number of replicas for an application.
+
+Kubernetes creates a replica set object, which manages a set of identical pod replicas.
+
+- The replica set creates the specified number of pods, and each pod contains a container that runs the application.
+
+- The deployment controller continuously monitors the state of the replicas and compares the current state to the desired state.
+
+- If there are any differences between the desired and current state, the deployment controller takes the necessary action to bring the cluster back to the desired state. This could involve scaling up or down the number of replicas, or rolling out a new version of the application.
+
+- When a new version of the application is rolled out, the deployment controller creates a new replica set with the updated application version and gradually replaces the old replica set with the new one. This allows the new version of the application to be rolled out with minimal downtime.
+
+- If there are any issues with the new version of the application, the deployment controller can roll back to the previous version using the same gradual replacement process.
+
+In summary, a Kubernetes deployment provides a declarative way to manage the state of a set of replicas for an application. The deployment controller ensures that the specified number of replicas are running and can handle rolling updates and rollbacks of application versions with minimal downtime.
+
+## How does Kubernetes handle scaling and load balancing?
+## What is a Kubernetes service, and how does it work?
+## What is a Kubernetes namespace, and how is it used?
+## How does Kubernetes handle storage, and what types of storage are available?
+## How does Kubernetes handle security, and what are some best practices for securing a Kubernetes cluster?
+## What are Kubernetes operators, and how are they used?
+## What are Custom Resource Definitions (CRDs), and how are they used?
+## How does Kubernetes handle rolling updates and rollbacks?
+## What are some common Kubernetes networking issues, and how can they be resolved?
+## What tools and frameworks do you use to deploy, manage and monitor Kubernetes clusters?
+## How would you troubleshoot a Kubernetes cluster that is experiencing performance issues or downtime?
+## What are some common Kubernetes deployment patterns, and when would you use them?
+## What are the benefits of using Kubernetes in a containerized environment?
+## What is Helm, and how is it used with Kubernetes?
+## What is the difference between a stateful set and a deployment in Kubernetes?
+## How do you monitor and debug Kubernetes clusters?
+
