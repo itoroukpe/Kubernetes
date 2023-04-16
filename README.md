@@ -845,5 +845,5 @@ func handleTask(event sdk.Event) error {
 
 
 ```
-### This curriculum covers the basics of Kubernetes, including key components, pods, services, deployments, and persistent storage. It also includes more advanced topics such as monitoring, security, and Kubernetes extensions. As you progress through the curriculum, you'll gain a deep understanding of how to manage containerized applications with Kubernetes.
-```
+This curriculum covers the basics of Kubernetes, including key components, pods, services, deployments, and persistent storage. It also includes more advanced topics such as monitoring, security, and Kubernetes extensions. As you progress through the curriculum, you'll gain a deep understanding of how to manage containerized applications with Kubernetes.
+
