@@ -38,29 +38,29 @@ In addition to these core components, Kubernetes supports a wide range of add-on
 - ## Kubernetes vs traditional infrastructure management
 - ## Installation and setup of Kubernetes cluster
 # Kubernetes Components:
-- ## Kubernetes API server
-- ## etcd data store
-- ## Kubernetes controller manager
-## Kubernetes scheduler
-- ## Kubernetes kubelet
-- ## Kubernetes container runtime interface (CRI)
+-  Kubernetes API server
+-  etcd data store
+-  Kubernetes controller manager
+- Kubernetes scheduler
+-  Kubernetes kubelet
+-  Kubernetes container runtime interface (CRI)
 # Kubernetes Pods:
-- ## Pod lifecycle management
-- ## Multi-container pods
--## Pod networking
+-  Pod lifecycle management
+-  Multi-container pods
+- Pod networking
 # Kubernetes Services:
-- ## Service types and their use cases
-Service discovery
+- Service types and their use cases
+- Service discovery
 - ## Load balancing with Kubernetes services
 # Kubernetes Deployments:
-- ## Deploying applications with Kubernetes
-- ## Rolling updates and rollbacks
-- ## Scaling applications with Kubernetes
+-  Deploying applications with Kubernetes
+-  Rolling updates and rollbacks
+-  Scaling applications with Kubernetes
 # Kubernetes ConfigMaps and Secrets:
-- ## Managing application configuration with ConfigMaps
-- ## Managing secrets with Kubernetes Secrets
+-  Managing application configuration with ConfigMaps
+-  Managing secrets with Kubernetes Secrets
 # Kubernetes StatefulSets:
-Kubernetes StatefulSets is a type of workload controller that manages stateful applications that require stable and unique network identifiers, persistent storage, ordered and graceful scaling, and consistent pod placement. StatefulSets provide a way to deploy and manage stateful applications, such as databases, message queues, and key-value stores, in Kubernetes.
+Load controller that manages stateful applications that require stable and unique network identifiers, persistent storage, ordered and graceful scaling, and consistent pod placement. StatefulSets provide a way to deploy and manage stateful applications, such as databases, message queues, and key-value stores, in Kubernetes.
 
 Here are some key features and benefits of StatefulSets:
 
@@ -243,7 +243,7 @@ Using persistent volumes in Kubernetes deployments involves incorporating the pe
 
 Overall, using persistent volumes in Kubernetes deployments involves creating a persistent volume, creating a persistent volume claim, updating the deployment specification, mounting the persistent volume in the container, deploying the application, and managing the persistent volume using Kubernetes tools.
 
-### Here's an example of using persistent volumes in a Kubernetes deployment:
+## Here's an example of using persistent volumes in a Kubernetes deployment:
 
 Assuming you have a MySQL database application that needs to store its data on a persistent volume. Here are the steps to use persistent volumes in the deployment:
 
@@ -655,7 +655,7 @@ Custom Resource Definitions (CRDs) are a powerful feature of Kubernetes that all
 
 CRDs allow you to define custom resources that are not included in the Kubernetes API by default. For example, if you are deploying a custom application that requires additional configuration data, you can create a custom resource definition to define the structure of the configuration data and store it as a custom resource in Kubernetes.
 
-Here are some benefits of using Custom Resource Definitions in Kubernetes:
+### Here are some benefits of using Custom Resource Definitions in Kubernetes:
 
 - Customization: CRDs allow you to customize Kubernetes to meet the needs of your specific application or workload.
 
@@ -667,7 +667,7 @@ Here are some benefits of using Custom Resource Definitions in Kubernetes:
 
 - Scalability: CRDs can be used to manage large-scale applications and workloads, providing a scalable way of managing custom resources in Kubernetes.
 
-Here are the basic steps for creating a Custom Resource Definition:
+### Here are the basic steps for creating a Custom Resource Definition:
 
 - Define the Custom Resource: Define the structure of the custom resource using YAML or JSON. This includes the metadata and spec fields for the resource.
 
@@ -679,7 +679,7 @@ Here are the basic steps for creating a Custom Resource Definition:
 
 In summary, Custom Resource Definitions are a powerful feature of Kubernetes that allow you to define custom resources and extend the Kubernetes API. CRDs provide a way to manage custom resources in Kubernetes and automate their management, making it easier to manage large-scale applications and workloads.
 
-Here's an example of how to define a Custom Resource Definition (CRD) for a hypothetical custom resource called "MyApp" in Kubernetes:
+###  Here's an example of how to define a Custom Resource Definition (CRD) for a hypothetical custom resource called "MyApp" in Kubernetes:
 
 Define the Custom Resource
 We first define the structure of the custom resource using YAML or JSON. Here is an example YAML file defining the "MyApp" resource:
