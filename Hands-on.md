@@ -1,243 +1,231 @@
-Here’s a comprehensive, phased approach to building hands-on Kubernetes expertise, starting from setting up Docker and Kubernetes on a virtual machine using **kubeadm**. Each phase builds on the previous one, covering Kubernetes installation, cluster configuration, and practical application of Kubernetes core components.
+Here's a hands-on guide for setting up and working with **Kubernetes** on Ubuntu 24.04, covering installation, configuration, and practical application. This guide is divided into phases, beginning with the installation of Docker and Kubernetes components using `kubeadm`.
 
 ---
 
-### **Phase 1: Setting Up Docker and Kubernetes Environment**
+### **Phase 1: Prerequisites and Environment Setup**
 
-#### Step 1: Setting Up a Virtual Machine
-- **Install Virtual Machine**: Set up a VM (e.g., on VirtualBox, VMware, or on cloud platforms like AWS/Google Cloud) with a compatible OS, such as **Ubuntu 20.04**.
-- **Allocate Resources**: Ensure the VM has sufficient resources: at least **2 CPUs, 2 GB RAM, and 10 GB storage**.
+#### Step 1: Prepare Virtual Machines
+   - Set up at least two VMs (one for the Kubernetes Master Node and others as Worker Nodes) with **Ubuntu 24.04**. Each VM should have at least:
+     - **2 CPUs**
+     - **2 GB RAM** (Master: 4GB recommended)
+     - **10 GB of storage**
+   - Update packages:
+     ```bash
+     sudo apt update && sudo apt upgrade -y
+     ```
 
-#### Step 2: Install Docker
-1. **Update Packages**:
-   ```bash
-   sudo apt-get update
-   sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-   ```
+#### Step 2: Install Basic Dependencies
+   - Install essential packages:
+     ```bash
+     sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+     ```
 
-2. **Add Docker Repository**:
-   ```bash
-   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-   ```
-
-3. **Install Docker**:
-   ```bash
-   sudo apt-get update
-   sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-   ```
-
-4. **Start and Enable Docker**:
-   ```bash
-   sudo systemctl start docker
-   sudo systemctl enable docker
-   ```
-
-#### Step 3: Install kubeadm, kubelet, and kubectl
-1. **Add Kubernetes Repository**:
-   ```bash
-   curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-   sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
-   ```
-
-2. **Install Kubernetes Tools**:
-   ```bash
-   sudo apt-get update
-   sudo apt-get install -y kubeadm kubelet kubectl
-   ```
-
-3. **Disable Swap** (required by Kubernetes):
-   ```bash
-   sudo swapoff -a
-   sudo sed -i '/ swap / s/^/#/' /etc/fstab
-   ```
-
-4. **Enable and Start kubelet**:
-   ```bash
-   sudo systemctl enable kubelet
-   sudo systemctl start kubelet
-   ```
+#### Step 3: Disable Swap
+   - Kubernetes requires that swap be disabled.
+     ```bash
+     sudo swapoff -a
+     sudo sed -i '/ swap / s/^/#/' /etc/fstab
+     ```
 
 ---
 
-### **Phase 2: Creating a Kubernetes Cluster with kubeadm**
+### **Phase 2: Docker Installation**
 
-#### Step 1: Initialize the Kubernetes Control Plane (Master Node)
-1. **Run kubeadm Init**:
-   ```bash
-   sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-   ```
+Docker is required to containerize applications within Kubernetes.
 
-2. **Set Up kubeconfig for kubectl Access**:
-   ```bash
-   mkdir -p $HOME/.kube
-   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-   sudo chown $(id -u):$(id -g) $HOME/.kube/config
-   ```
+#### Step 1: Install Docker
+   - Install Docker's prerequisites:
+     ```bash
+     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+     ```
+   - Install Docker:
+     ```bash
+     sudo apt update
+     sudo apt install -y docker-ce docker-ce-cli containerd.io
+     ```
 
-3. **Record the Join Command**: Copy the output command that starts with `kubeadm join ...`. This will be used to add worker nodes to the cluster.
+#### Step 2: Enable and Start Docker
+   - Start Docker and set it to run at boot:
+     ```bash
+     sudo systemctl enable docker
+     sudo systemctl start docker
+     ```
 
-#### Step 2: Set Up Pod Network
-1. **Install Flannel as the Pod Network**:
-   ```bash
-   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-   ```
-
-2. **Verify Cluster Status**:
-   ```bash
-   kubectl get nodes
-   ```
+#### Step 3: Verify Docker Installation
+   - Run a test to confirm Docker is installed:
+     ```bash
+     sudo docker run hello-world
+     ```
 
 ---
 
-### **Phase 3: Adding Worker Nodes to the Cluster**
+### **Phase 3: Install Kubernetes Components**
 
-1. **Run the Join Command on Each Worker Node** (Using VM clones or separate VMs as worker nodes):
-   - SSH into each worker node and execute the `kubeadm join ...` command you saved from the master node initialization step.
+#### Step 1: Add Kubernetes APT Repository
+   - Add Kubernetes’ package repository:
+     ```bash
+     sudo curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
+     echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+     sudo apt update
+     ```
 
-2. **Verify Cluster Nodes**:
-   - On the master node, run:
+#### Step 2: Install `kubeadm`, `kubelet`, and `kubectl`
+   - Install Kubernetes components:
+     ```bash
+     sudo apt install -y kubelet kubeadm kubectl
+     sudo apt-mark hold kubelet kubeadm kubectl
+     ```
+
+---
+
+### **Phase 4: Configure the Kubernetes Master Node**
+
+#### Step 1: Initialize the Kubernetes Cluster
+   - Run the following on the Master Node:
+     ```bash
+     sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+     ```
+   - Note the `kubeadm join` command displayed at the end of the initialization process. You will use this to add Worker Nodes later.
+
+#### Step 2: Configure `kubectl` for the Master Node
+   - Set up `kubectl` for the master:
+     ```bash
+     mkdir -p $HOME/.kube
+     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+     sudo chown $(id -u):$(id -g) $HOME/.kube/config
+     ```
+
+#### Step 3: Deploy a Network Plugin
+   - Use the Flannel CNI plugin to enable networking between pods:
+     ```bash
+     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+     ```
+
+---
+
+### **Phase 5: Add Worker Nodes to the Cluster**
+
+#### Step 1: Join Worker Nodes to the Cluster
+   - On each Worker Node, use the `kubeadm join` command from the Master Node setup output:
+     ```bash
+     sudo kubeadm join <MASTER_IP>:<PORT> --token <TOKEN> --discovery-token-ca-cert-hash sha256:<HASH>
+     ```
+   - You can verify nodes have joined with:
      ```bash
      kubectl get nodes
      ```
-   - Ensure all nodes show as `Ready`.
 
 ---
 
-### **Phase 4: Deploying Applications and Managing Kubernetes Components**
+### **Phase 6: Deploy and Manage Pods**
 
-#### Step 1: Deploy a Sample Application
-1. **Create a Deployment**:
-   ```bash
-   kubectl create deployment nginx --image=nginx
-   ```
-
-2. **Expose the Deployment as a Service**:
-   ```bash
-   kubectl expose deployment nginx --port=80 --type=NodePort
-   ```
-
-3. **Verify Service Availability**:
-   - Find the NodePort:
+#### Step 1: Create a Test Deployment
+   - Create an NGINX deployment:
      ```bash
-     kubectl get service nginx
-     ```
-   - Access the application by visiting `http://<Node_IP>:<NodePort>` in a web browser.
-
-#### Step 2: Scaling Applications
-1. **Scale the Deployment**:
-   ```bash
-   kubectl scale deployment nginx --replicas=3
-   ```
-
-2. **Verify Pods**:
-   ```bash
-   kubectl get pods -o wide
-   ```
-
-#### Step 3: Rolling Updates
-1. **Update the Deployment Image**:
-   ```bash
-   kubectl set image deployment/nginx nginx=nginx:1.19.10
-   ```
-
-2. **Monitor the Update Status**:
-   ```bash
-   kubectl rollout status deployment/nginx
-   ```
-
----
-
-### **Phase 5: Advanced Kubernetes Features and Concepts**
-
-#### Step 1: ConfigMaps and Secrets
-- **Create a ConfigMap**:
-  ```bash
-  kubectl create configmap example-config --from-literal=example.key=value
-  ```
-- **Create a Secret**:
-  ```bash
-  kubectl create secret generic example-secret --from-literal=password=my-secret-password
-  ```
-
-#### Step 2: Persistent Storage (PVCs)
-1. **Create a PersistentVolumeClaim**:
-   ```yaml
-   apiVersion: v1
-   kind: PersistentVolumeClaim
-   metadata:
-     name: pvc-example
-   spec:
-     accessModes:
-       - ReadWriteOnce
-     resources:
-       requests:
-         storage: 1Gi
-   ```
-   - Save this to a file (e.g., `pvc-example.yaml`) and apply:
-     ```bash
-     kubectl apply -f pvc-example.yaml
+     kubectl create deployment nginx --image=nginx
      ```
 
-2. **Mount PVC in a Pod**:
-   - Reference the PVC in a pod spec to create storage volumes within a container.
-
-#### Step 3: Ingress Controller
-1. **Install an Ingress Controller** (e.g., NGINX Ingress):
-   ```bash
-   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
-   ```
-
-2. **Create an Ingress Resource** to manage routing for services.
-
----
-
-### **Phase 6: Monitoring and Logging**
-
-1. **Set Up Metrics Server** for basic monitoring:
-   ```bash
-   kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
-   ```
-
-2. **Deploy Prometheus and Grafana** for advanced monitoring:
-   - Use Helm to deploy:
+#### Step 2: Expose the Deployment
+   - Expose NGINX deployment to test accessibility:
      ```bash
-     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-     helm install prometheus prometheus-community/kube-prometheus-stack
+     kubectl expose deployment nginx --type=NodePort --port=80
+     ```
+   - Retrieve the service details to get the port number:
+     ```bash
+     kubectl get svc
      ```
 
-3. **Enable Logging**:
-   - Deploy logging solutions like **Fluentd** with **Elasticsearch** and **Kibana (EFK stack)** for cluster-wide logging.
-
----
-
-### **Phase 7: Security and Role-Based Access Control (RBAC)**
-
-1. **Set Up RBAC**:
-   - Create roles and role bindings to define access permissions within the cluster.
-
-2. **Network Policies**:
-   - Implement network policies to control pod-to-pod communication based on application needs.
-
-3. **Secrets Management**:
-   - Secure sensitive data using Kubernetes secrets and limit access through RBAC policies.
-
----
-
-### **Phase 8: Automating Kubernetes with CI/CD**
-
-1. **Set Up a CI/CD Pipeline**:
-   - Use Jenkins, GitLab CI, or GitHub Actions to automate deployments to your Kubernetes cluster.
-
-2. **Implement GitOps with ArgoCD**:
-   - Use ArgoCD to manage applications declaratively with Git as the source of truth.
-
-3. **Automated Scaling with Horizontal Pod Autoscaler**:
-   - Configure HPA to scale workloads based on CPU or memory usage:
+#### Step 3: Scale the Deployment
+   - Scale the NGINX deployment to run three replicas:
      ```bash
-     kubectl autoscale deployment nginx --min=2 --max=5 --cpu-percent=80
+     kubectl scale deployment nginx --replicas=3
+     ```
+
+#### Step 4: Check Deployment and Pods
+   - Verify the deployment status and list pods:
+     ```bash
+     kubectl get deployments
+     kubectl get pods
      ```
 
 ---
 
-This comprehensive hands-on guide takes you through setting up Kubernetes from scratch, deploying applications, managing configurations, monitoring, and automating processes to build a complete, production-ready Kubernetes environment.
+### **Phase 7: Advanced Kubernetes Management**
+
+#### Step 1: Set Up Namespaces
+   - Create a custom namespace:
+     ```bash
+     kubectl create namespace dev
+     ```
+
+#### Step 2: Use ConfigMaps and Secrets
+   - **ConfigMap**: Store configuration data in Kubernetes.
+     ```bash
+     kubectl create configmap nginx-config --from-literal=key=value
+     ```
+   - **Secret**: Securely store sensitive information.
+     ```bash
+     kubectl create secret generic db-secret --from-literal=username=admin --from-literal=password=secret
+     ```
+
+#### Step 3: Implement Autoscaling
+   - Enable horizontal pod autoscaling based on CPU usage:
+     ```bash
+     kubectl autoscale deployment nginx --cpu-percent=50 --min=1 --max=5
+     ```
+
+---
+
+### **Phase 8: Monitoring and Logging**
+
+#### Step 1: Set Up Kubernetes Metrics Server
+   - Install Metrics Server to enable resource-based autoscaling:
+     ```bash
+     kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+     ```
+
+#### Step 2: Enable Cluster Logging with Fluentd and Elasticsearch
+   - Deploy a logging stack (Fluentd, Elasticsearch, Kibana):
+     ```bash
+     kubectl apply -f https://k8s.io/examples/cluster-logging/fluentd-es-configmap.yaml
+     kubectl apply -f https://k8s.io/examples/cluster-logging/fluentd-es.yaml
+     ```
+
+---
+
+### **Phase 9: Backup and Restore**
+
+#### Step 1: Backup ETCD (Kubernetes data store)
+   - Create a snapshot of the ETCD data:
+     ```bash
+     sudo ETCDCTL_API=3 etcdctl snapshot save snapshot.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+     ```
+
+#### Step 2: Restore ETCD from a Snapshot
+   - Restore from the backup in case of failure:
+     ```bash
+     sudo ETCDCTL_API=3 etcdctl snapshot restore snapshot.db --data-dir /var/lib/etcd-backup
+     ```
+
+---
+
+### **Phase 10: Cleanup and Cluster Deletion**
+
+To remove a node from the cluster:
+   ```bash
+   kubectl drain <node-name> --delete-local-data --force --ignore-daemonsets
+   kubectl delete node <node-name>
+   ```
+
+To delete the entire cluster, you can reset the nodes:
+   ```bash
+   sudo kubeadm reset
+   sudo systemctl stop kubelet
+   sudo systemctl disable kubelet
+   ```
+
+---
+
+### Conclusion
+This hands-on guide covers everything from the installation of Docker and Kubernetes components on Ubuntu 24.04 to advanced Kubernetes management tasks. By following each phase, you’ll gain a complete understanding of how to set up, manage, and troubleshoot a Kubernetes environment, preparing you for real-world applications of container orchestration.
