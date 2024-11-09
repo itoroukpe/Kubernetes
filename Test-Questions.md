@@ -1,7 +1,7 @@
 
 
 ### **Practice Test: Cluster Installation using `kubeadm`**
-```
+
 #### **1. What is the purpose of `kubeadm init`?**
    - a) To initialize the `kubelet` service on the node
    - b) To initialize the control plane on the master node
@@ -10,7 +10,7 @@
 
    **Answer:** **b) To initialize the control plane on the master node**
 
----
+
 
 #### **2. Which command would you use to join a new worker node to the existing Kubernetes cluster?**
    - a) `kubeadm join <cluster_token>`
