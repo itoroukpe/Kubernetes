@@ -1,7 +1,7 @@
----
+
 
 ### **Practice Test: Cluster Installation using `kubeadm`**
-
+```
 #### **1. What is the purpose of `kubeadm init`?**
    - a) To initialize the `kubelet` service on the node
    - b) To initialize the control plane on the master node
