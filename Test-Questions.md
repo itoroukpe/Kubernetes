@@ -152,11 +152,10 @@
 
 ---
 
--------------------------------------------------------------------------------
 
 
 ### **Practice Test: Cluster Installation using K0**
-```
+
 #### **1. What is K0 primarily used for in Kubernetes?**
    - a) To create virtual machines
    - b) To simplify the installation of Kubernetes clusters
