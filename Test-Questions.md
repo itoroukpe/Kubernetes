@@ -301,8 +301,8 @@
    - b) `kubectl add worker`
    - c) `k0 worker add`
    - d) `k0 join --token <token> <master_ip>:<port>`
-
+```
    **Answer:** **d) k0 join --token <token> <master_ip>:<port>**
-
+```
 ---
 
