@@ -10,7 +10,7 @@
 
    **Answer:** **b) To initialize the control plane on the master node**
 
-
+---
 
 #### **2. Which command would you use to join a new worker node to the existing Kubernetes cluster?**
    - a) `kubeadm join <cluster_token>`
@@ -67,9 +67,9 @@
    - b) `kubectl config set-context`
    - c) `mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config`
    - d) `kubeadm add user`
-
+```
    **Answer:** **c) mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config**
-
+```
 ---
 
 #### **8. Which of the following is NOT a necessary step in preparing a node for Kubernetes installation?**
