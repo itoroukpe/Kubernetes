@@ -305,4 +305,210 @@
    **Answer:** **d) k0 join --token <token> <master_ip>:<port>**
 ```
 ---
+Here’s a practice test on **Deploying Stateful and Stateless Applications on Kubernetes** that covers various concepts related to managing stateful and stateless workloads. Answers are indicated below each question.
+
+---
+
+### **Practice Test: Deploying Stateful and Stateless Applications on Kubernetes**
+
+#### **1. Which of the following resources is recommended for deploying a stateless application in Kubernetes?**
+   - a) StatefulSet
+   - b) Deployment
+   - c) ConfigMap
+   - d) PersistentVolumeClaim
+
+   **Answer:** **b) Deployment**
+
+---
+
+#### **2. What is the primary difference between StatefulSets and Deployments in Kubernetes?**
+   - a) StatefulSets cannot scale, while Deployments can.
+   - b) StatefulSets maintain unique identities for each pod, while Deployments do not.
+   - c) Deployments use PersistentVolumeClaims by default, while StatefulSets do not.
+   - d) Deployments require additional configuration for DNS, while StatefulSets do not.
+
+   **Answer:** **b) StatefulSets maintain unique identities for each pod, while Deployments do not.**
+
+---
+
+#### **3. Which command would you use to create a StatefulSet from a YAML file?**
+   - a) `kubectl create -f statefulset.yaml`
+   - b) `kubectl apply statefulset.yaml`
+   - c) `kubectl set create -f statefulset.yaml`
+   - d) `kubectl run statefulset.yaml`
+
+   **Answer:** **a) kubectl create -f statefulset.yaml**
+
+---
+
+#### **4. When a StatefulSet scales down, which pod is terminated first?**
+   - a) The pod with the highest ordinal number
+   - b) The pod with the lowest ordinal number
+   - c) The pod that is least active
+   - d) The pod with the most resource consumption
+
+   **Answer:** **a) The pod with the highest ordinal number**
+
+---
+
+#### **5. Which of the following features is unique to StatefulSets but not Deployments?**
+   - a) Automatic pod scaling
+   - b) Stable, unique network identifiers for each pod
+   - c) Load balancing across all pods
+   - d) Statelessness of pods
+
+   **Answer:** **b) Stable, unique network identifiers for each pod**
+
+---
+
+#### **6. In a StatefulSet, each pod has its own PersistentVolume. What type of Kubernetes object is commonly used to create these PersistentVolumes dynamically?**
+   - a) ConfigMap
+   - b) PersistentVolumeClaim
+   - c) Deployment
+   - d) Service
+
+   **Answer:** **b) PersistentVolumeClaim**
+
+---
+
+#### **7. Which storage solution should be used for stateful applications to persist data, even if the pods are rescheduled?**
+   - a) ConfigMap
+   - b) PersistentVolume
+   - c) Pod Volume
+   - d) Service Account
+
+   **Answer:** **b) PersistentVolume**
+
+---
+
+#### **8. Which command can you use to scale a Deployment from 3 replicas to 5 replicas?**
+   - a) `kubectl scale deployment my-deployment --replicas=5`
+   - b) `kubectl update deployment my-deployment --replicas=5`
+   - c) `kubectl create deployment my-deployment --replicas=5`
+   - d) `kubectl set replicas deployment my-deployment --size=5`
+
+   **Answer:** **a) kubectl scale deployment my-deployment --replicas=5**
+
+---
+
+#### **9. Which of the following storage options would NOT be ideal for a StatefulSet?**
+   - a) PersistentVolumeClaim
+   - b) EmptyDir
+   - c) NFS-backed PersistentVolume
+   - d) Cloud-based PersistentVolume
+
+   **Answer:** **b) EmptyDir**
+
+---
+
+#### **10. Which resource would you typically use to configure environment-specific configurations in a stateless application?**
+   - a) Secret
+   - b) ConfigMap
+   - c) Service
+   - d) PersistentVolume
+
+   **Answer:** **b) ConfigMap**
+
+---
+
+#### **11. How does a StatefulSet differ in scaling compared to a Deployment?**
+   - a) StatefulSets scale all pods simultaneously, while Deployments scale one at a time.
+   - b) StatefulSets scale pods one by one in order, while Deployments can scale multiple pods at once.
+   - c) StatefulSets do not support scaling, while Deployments do.
+   - d) StatefulSets require external scaling tools, while Deployments do not.
+
+   **Answer:** **b) StatefulSets scale pods one by one in order, while Deployments can scale multiple pods at once.**
+
+---
+
+#### **12. Which field in a StatefulSet YAML file ensures that each pod gets a unique identifier?**
+   - a) `selector`
+   - b) `replicas`
+   - c) `volumeClaimTemplates`
+   - d) `serviceName`
+
+   **Answer:** **d) serviceName**
+
+---
+
+#### **13. When deploying a MySQL database in Kubernetes, which Kubernetes resource would you use to ensure that data persists across pod restarts?**
+   - a) ConfigMap
+   - b) PersistentVolumeClaim
+   - c) EmptyDir Volume
+   - d) Deployment
+
+   **Answer:** **b) PersistentVolumeClaim**
+
+---
+
+#### **14. Which Kubernetes object provides a unique, DNS-resolvable hostname for each pod in a StatefulSet?**
+   - a) Headless Service
+   - b) NodePort Service
+   - c) LoadBalancer Service
+   - d) ClusterIP Service
+
+   **Answer:** **a) Headless Service**
+
+---
+
+#### **15. Which command would you use to retrieve detailed information about a StatefulSet named "my-statefulset"?**
+   - a) `kubectl describe statefulset my-statefulset`
+   - b) `kubectl get statefulset my-statefulset --details`
+   - c) `kubectl view statefulset my-statefulset`
+   - d) `kubectl logs statefulset my-statefulset`
+
+   **Answer:** **a) kubectl describe statefulset my-statefulset**
+
+---
+
+#### **16. When using a StatefulSet, what is the purpose of `volumeClaimTemplates`?**
+   - a) To dynamically create PersistentVolumes for each pod
+   - b) To define environment variables for each pod
+   - c) To define the network configuration for each pod
+   - d) To specify a common storage volume for all pods
+
+   **Answer:** **a) To dynamically create PersistentVolumes for each pod**
+
+---
+
+#### **17. Which of the following commands would you use to delete a StatefulSet without removing the associated PersistentVolumeClaims (PVCs)?**
+   - a) `kubectl delete statefulset <name> --cascade=false`
+   - b) `kubectl delete statefulset <name> --retain-pvc`
+   - c) `kubectl delete pvc <name> --cascade=statefulset`
+   - d) `kubectl delete pod <name> --retain-volumes`
+
+   **Answer:** **a) kubectl delete statefulset <name> --cascade=false**
+
+---
+
+#### **18. How can you expose a StatefulSet as a network service with a unique, predictable DNS name?**
+   - a) By using a ClusterIP Service
+   - b) By using a Headless Service
+   - c) By using a NodePort Service
+   - d) By using a LoadBalancer Service
+
+   **Answer:** **b) By using a Headless Service**
+
+---
+
+#### **19. Which of the following is true for a stateless application in Kubernetes?**
+   - a) It requires a PersistentVolumeClaim for data storage.
+   - b) Each instance of the application is identical and does not retain data after termination.
+   - c) Each pod has a unique identifier that is retained on restart.
+   - d) It relies on StatefulSets for deployment.
+
+   **Answer:** **b) Each instance of the application is identical and does not retain data after termination.**
+
+---
+
+#### **20. Which Kubernetes feature allows each pod in a StatefulSet to retain a unique storage volume?**
+   - a) ConfigMap
+   - b) Service Account
+   - c) PersistentVolumeClaim
+   - d) Ingress
+
+   **Answer:** **c) PersistentVolumeClaim**
+
+---
+
 
