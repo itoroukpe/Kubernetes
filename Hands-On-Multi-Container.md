@@ -100,7 +100,77 @@ This hands-on workshop teaches participants how to deploy a multi-container appl
          targetPort: 80
        type: LoadBalancer
      ```
+---
+To expose the app using a **NodePort** service instead of a **LoadBalancer**, update the `type` field in the Service manifest. Here’s the modified manifest:
 
+---
+
+### NodePort Service Manifest for Exposing the App
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: multi-container-pod
+  ports:
+  - protocol: TCP
+    port: 80         # Service port exposed to external clients
+    targetPort: 80    # Port on the pod to forward traffic to
+    nodePort: 30080   # Fixed NodePort (optional, otherwise Kubernetes assigns a random port in the range 30000-32767)
+  type: NodePort
+```
+
+---
+
+### Explanation of Changes:
+1. **`type: NodePort`**:
+   - Changes the service type to **NodePort**, which exposes the service on a static port (or a Kubernetes-assigned port) on every node in the cluster.
+
+2. **`nodePort: 30080`** (Optional):
+   - Specifies the exact NodePort to use for exposing the service. If omitted, Kubernetes assigns a random port in the range 30000–32767.
+   - Use this field if you want to define a consistent and predictable port.
+
+3. **`port` vs `targetPort`**:
+   - **`port: 80`**: The port on which the service is accessible externally.
+   - **`targetPort: 80`**: The port on the container inside the pod where traffic is directed.
+
+---
+
+### Steps to Apply the Manifest:
+1. Save the manifest as `nginx-service.yaml`.
+2. Apply the manifest to your Kubernetes cluster:
+   ```bash
+   kubectl apply -f nginx-service.yaml
+   ```
+
+3. Verify the service:
+   ```bash
+   kubectl get services
+   ```
+
+   Example output:
+   ```
+   NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+   nginx-service    NodePort    10.96.123.456    <none>        80:30080/TCP   2m
+   ```
+
+---
+
+### Access the App:
+To access the application:
+1. Use the **Node IP** of any worker node in the cluster.
+2. Combine it with the **NodePort** (e.g., `30080`).
+
+Example:
+```
+http://<Node-IP>:30080
+```
+
+This configuration ensures your application is exposed to external traffic through the NodePort service on all Kubernetes worker nodes.
+---
 2. **Applying and Testing the Service**
    - Apply the Service configuration:
      ```bash
