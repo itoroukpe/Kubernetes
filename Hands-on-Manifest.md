@@ -126,7 +126,6 @@ This manifest file, `stateless-app.yaml`, defines a **Kubernetes Deployment** fo
 2. **Scalability**: You can easily scale the application by changing the `replicas` count and reapplying the manifest.
 3. **Stateless Nature**: Each pod is independent and does not maintain a persistent state, making it ideal for load-balanced applications. 
 
-This is a typical setup for deploying a stateless application in Kubernetes.
 ---
 3. **Deploying and Testing (10 minutes)**
    - Apply the manifest: `kubectl apply -f stateless-app.yaml`
