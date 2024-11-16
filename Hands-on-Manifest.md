@@ -3,7 +3,7 @@ This workshop is designed for participants with basic Kubernetes knowledge, aimi
 3. **Writing the StatefulSet Manifest (15 minutes)**
    - Create a new file: `stateful-app.yaml`
    - Define a `StatefulSet` for MySQL:
-     ```yaml
+```yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -41,7 +41,7 @@ volumeClaimTemplates:
         requests:
           storage: 5Gi
 
-     ```
+```
 ---
 
 ### **Workshop Title:** 
