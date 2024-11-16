@@ -424,7 +424,8 @@ This configuration enables persistent storage for applications in K0s by using l
 3. **Writing the StatefulSet Manifest (15 minutes)**
    - Create a new file: `stateful-app.yaml`
    - Define a `StatefulSet` for MySQL:
-     ```yaml
+
+```yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -461,10 +462,10 @@ spec:
       resources:
         requests:
           storage: 5Gi
+```
 
-     ```
+
 ---
-
 ### Headless Service Manifest
 Save this as `mysql-service.yaml`:
 
