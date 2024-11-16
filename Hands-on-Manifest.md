@@ -1,48 +1,6 @@
 This workshop is designed for participants with basic Kubernetes knowledge, aiming to deepen their skills in defining application configurations and managing deployments.
 ---
-3. **Writing the StatefulSet Manifest (15 minutes)**
-   - Create a new file: `stateful-app.yaml`
-   - Define a `StatefulSet` for MySQL:
-```yaml
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: mysql
-spec:
-  selector:
-    matchLabels:
-      app: mysql
-  serviceName: "mysql"
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: mysql
-    spec:
-      containers:
-      - name: mysql
-        image: mysql:5.7
-        ports:
-        - containerPort: 3306
-          name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "yourpassword" # Replace with a secure password
-        volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
-volumeClaimTemplates:
-  - metadata:
-      name: mysql-persistent-storage
-    spec:
-      accessModes:
-      - ReadWriteOnce
-      resources:
-        requests:
-          storage: 5Gi
 
-```
----
 
 ### **Workshop Title:** 
 **Deploying Stateful and Stateless Applications on Kubernetes**
