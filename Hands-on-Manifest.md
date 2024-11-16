@@ -242,7 +242,7 @@ This manifest file defines a **Kubernetes Service** that exposes the `stateless-
    - Use cases for `StatefulSets` and need for `PersistentVolume` (PV) and `PersistentVolumeClaim` (PVC)
 
 2. **Setting Up Persistent Storage (15 minutes)**
-   - Create `PersistentVolume` (PV) and `PersistentVolumeClaim` (PVC):
+   - Create `PersistentVolume` (PV) and `PersistentVolumeClaim` (PVC): mysql-pv.yaml
      ```yaml
      apiVersion: v1
      kind: PersistentVolume
@@ -254,61 +254,134 @@ This manifest file defines a **Kubernetes Service** that exposes the `stateless-
        accessModes:
          - ReadWriteOnce
        hostPath:
-         path: "/mnt/data/mysql"  # For Minikube; change for cloud environment
+         path: "/mnt/k0s-data/mysql"  # Update this path to match the directory on your K0s node
      ---
-     apiVersion: v1
-     kind: PersistentVolumeClaim
-     metadata:
-       name: mysql-pvc
-     spec:
-       accessModes:
-         - ReadWriteOnce
-       resources:
-         requests:
-           storage: 5Gi
-     ```
+    
+### PersistentVolumeClaim (PVC) Configuration: mysql-pvc.yaml
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+```
 
+---
+
+### Steps to Apply in K0s:
+1. Save the configurations into separate YAML files:
+   - `mysql-pv.yaml` for the **PersistentVolume**.
+   - `mysql-pvc.yaml` for the **PersistentVolumeClaim**.
+
+2. Apply the configurations to your K0s cluster:
+   ```bash
+   kubectl apply -f mysql-pv.yaml
+   kubectl apply -f mysql-pvc.yaml
+   ```
+
+3. Verify that the PV and PVC are created and bound:
+   ```bash
+   kubectl get pv
+   kubectl get pvc
+   ```
+
+   Example output:
+   ```
+   NAME        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM           STORAGECLASS   REASON   AGE
+   mysql-pv    5Gi        RWO            Retain           Bound    default/mysql-pvc   standard               10m
+   ```
+
+   The **STATUS** should be `Bound` for both the PV and PVC.
+
+---
+
+### Notes for K0s:
+- **`hostPath`**: The specified path (`/mnt/k0s-data/mysql`) must exist on the node running K0s. Ensure the directory is created with the necessary permissions:
+   ```bash
+   mkdir -p /mnt/k0s-data/mysql
+   chmod 777 /mnt/k0s-data/mysql
+   ```
+
+- For a multi-node K0s setup, you should use a storage solution like NFS, GlusterFS, or a cloud-based storage provider for shared access, instead of `hostPath`, as `hostPath` is node-specific.
+
+This configuration enables persistent storage for applications in K0s by using local paths or extending it for distributed setups with storage solutions.
+
+---
 3. **Writing the StatefulSet Manifest (15 minutes)**
    - Create a new file: `stateful-app.yaml`
    - Define a `StatefulSet` for MySQL:
      ```yaml
-     apiVersion: apps/v1
-     kind: StatefulSet
-     metadata:
-       name: mysql
-     spec:
-       selector:
-         matchLabels:
-           app: mysql
-       serviceName: "mysql"
-       replicas: 1
-       template:
-         metadata:
-           labels:
-             app: mysql
-         spec:
-           containers:
-           - name: mysql
-             image: mysql:5.7
-             ports:
-             - containerPort: 3306
-               name: mysql
-             env:
-             - name: MYSQL_ROOT_PASSWORD
-               value: "yourpassword"
-             volumeMounts:
-             - name: mysql-persistent-storage
-               mountPath: /var/lib/mysql
-       volumeClaimTemplates:
-       - metadata:
-           name: mysql-persistent-storage
-         spec:
-           accessModes: ["ReadWriteOnce"]
-           resources:
-             requests:
-               storage: 5Gi
-     ```
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: "mysql"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "yourpassword" # Replace with a secure password
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-persistent-storage
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
 
+     ```
+---
+
+### Headless Service Manifest
+Save this as `mysql-service.yaml`:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  clusterIP: None # Creates a headless service
+  selector:
+    app: mysql
+```
+
+---
+
+### Notes:
+- The `volumeClaimTemplates` ensures that each replica gets its own PVC dynamically.
+- Ensure that the previously created `PersistentVolume` and `PersistentVolumeClaim` are in the same namespace as this StatefulSet to ensure correct binding.
+- Replace `yourpassword` in `MYSQL_ROOT_PASSWORD` with a secure value.
+
+This configuration ensures persistent storage for MySQL in your **K0s** cluster while leveraging StatefulSets to manage the stateful nature of the application.
+---
 4. **Deploying and Testing (10 minutes)**
    - Apply the StatefulSet: `kubectl apply -f stateful-app.yaml`
    - Verify pod creation and persistent storage with `kubectl get pods`, `kubectl get pvc`
@@ -338,4 +411,4 @@ By the end of this workshop, participants will be able to:
 
 ---
 
-Feel free to adjust the time or depth for each section based on the audience's familiarity with Kubernetes. Let me know if you’d like to refine or expand any specific area!
+
