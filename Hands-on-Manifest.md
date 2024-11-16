@@ -64,7 +64,70 @@ Developers, DevOps Engineers, and System Administrators with basic knowledge of 
              ports:
              - containerPort: 80
      ```
+This manifest file, `stateless-app.yaml`, defines a **Kubernetes Deployment** for a stateless application. The deployment ensures high availability and scalability of the application by creating and managing multiple replicas of the application pods.
 
+### **Explanation of the Manifest**
+
+1. **`apiVersion: apps/v1`**  
+   - Specifies the API version of the Kubernetes object. In this case, `apps/v1` is used for the Deployment object.
+
+2. **`kind: Deployment`**  
+   - Specifies the type of Kubernetes resource being created. Here, it is a **Deployment**, which manages the lifecycle of application pods.
+
+3. **`metadata:`**  
+   - Contains metadata about the Deployment.
+   - `name: stateless-app`: Assigns the Deployment the name `stateless-app`.
+
+4. **`spec:`**  
+   - The `spec` section defines the desired state of the Deployment.
+
+   - **`replicas: 3`**:  
+     Specifies the number of pod replicas to run. Kubernetes ensures there are always 3 pods running for this Deployment.
+
+   - **`selector:`**  
+     Identifies which pods are managed by this Deployment. The selector matches pods with the label `app: stateless-app`.
+
+   - **`template:`**  
+     Describes the pod template, which defines how the pods created by this Deployment should look.
+
+     - **`metadata:`**  
+       - Contains labels for the pod. The label `app: stateless-app` associates the pods with the Deployment.
+     
+     - **`spec:`**  
+       - Defines the pod specifications, including its containers.
+     
+       - **`containers:`**  
+         - Lists the containers to be created within each pod.
+
+         - **`- name: web`**:  
+           Names the container `web` for easier identification.
+
+         - **`image: nginx:latest`**:  
+           Specifies the container image to use. In this case, it uses the latest version of the official `nginx` image from a container registry like Docker Hub.
+
+         - **`ports:`**  
+           - Specifies the ports exposed by the container.
+           - **`- containerPort: 80`**:  
+             Exposes port `80` inside the container. This is the default HTTP port for `nginx` to serve web traffic.
+
+---
+
+### **What This Manifest Does**
+- Creates a **Deployment** named `stateless-app`.
+- Ensures **3 replicas** of the pod are always running.
+- Each pod runs a container with the `nginx:latest` image and exposes port `80` for HTTP traffic.
+- Kubernetes monitors and maintains the desired state (e.g., if a pod crashes, it will automatically recreate it).
+
+---
+
+
+### **Key Benefits of This Deployment**
+1. **High Availability**: Ensures multiple replicas of the app are running for fault tolerance.
+2. **Scalability**: You can easily scale the application by changing the `replicas` count and reapplying the manifest.
+3. **Stateless Nature**: Each pod is independent and does not maintain a persistent state, making it ideal for load-balanced applications. 
+
+This is a typical setup for deploying a stateless application in Kubernetes.
+---
 3. **Deploying and Testing (10 minutes)**
    - Apply the manifest: `kubectl apply -f stateless-app.yaml`
    - Verify the deployment: `kubectl get deployments`
