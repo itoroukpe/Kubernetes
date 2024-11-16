@@ -218,7 +218,74 @@ This manifest file defines a **Kubernetes Service** that exposes the `stateless-
    ```
 
 ---
+To expose the port using a **NodePort** service instead of a **LoadBalancer**, you need to modify the `type` field in the Service manifest to `NodePort`. Here's the updated manifest:
 
+---
+
+### NodePort Service Manifest for `stateless-service`
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: stateless-service
+spec:
+  selector:
+    app: stateless-app
+  ports:
+    - protocol: TCP
+      port: 80         # Service port exposed to external clients
+      targetPort: 80    # Port on the pod to forward traffic to
+      nodePort: 30080   # Fixed NodePort (optional; Kubernetes will assign one if omitted)
+  type: NodePort
+```
+
+---
+
+### Explanation of Changes:
+1. **`type: NodePort`**:
+   - Changed the service type to **NodePort** to expose the service on a port of the Kubernetes nodes.
+
+2. **`nodePort: 30080`**:
+   - Specifies a fixed NodePort to use for exposing the service. If omitted, Kubernetes assigns a random port in the range 30000–32767.
+
+3. **`port` vs `targetPort`**:
+   - **`port: 80`**: The port on the service where external traffic is received.
+   - **`targetPort: 80`**: The port on the container in the pod where the service forwards traffic.
+
+---
+
+### Steps to Apply the Manifest:
+1. Save the updated manifest to a file, e.g., `stateless-service.yaml`.
+2. Apply the manifest:
+   ```bash
+   kubectl apply -f stateless-service.yaml
+   ```
+
+3. Verify the service:
+   ```bash
+   kubectl get services
+   ```
+
+   Example output:
+   ```
+   NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+   stateless-service  NodePort    10.96.123.456    <none>        80:30080/TCP     2m
+   ```
+
+---
+
+### Access the Application:
+1. Use the **Node IP** of any worker node in the cluster.
+2. Combine it with the **NodePort** (e.g., `30080`).
+
+Example URL:
+```
+http://<Node-IP>:30080
+```
+
+This configuration ensures the application is exposed to external traffic through a NodePort service on all Kubernetes worker nodes.
+---
 ### **Benefits of This Service Configuration**
 1. **External Accessibility**: Enables users to access the application from outside the Kubernetes cluster.
 2. **Load Balancing**: Distributes incoming traffic across the available pod replicas, ensuring high availability and reliability.
