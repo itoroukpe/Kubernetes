@@ -92,6 +92,21 @@
    ```bash
    kubectl expose deployment jenkins --type=NodePort --port=8080 --namespace=cicd
    ```
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  namespace: cicd
+spec:
+  selector:
+    app: jenkins
+  ports:
+  - port: 8080         # The port the service will expose
+    targetPort: 8080   # The container port to forward traffic to
+    protocol: TCP
+    nodePort: 32000    # Specify a NodePort in the range 30000-32767
+  type: NodePort       # Service type to expose externally
 
 ---
 
