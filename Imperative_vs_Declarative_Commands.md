@@ -50,7 +50,13 @@ kubectl get deployment -o wide
   ```bash
   kubectl create configmap my-config --from-literal=key1=value1 --from-literal=key2=value2
   ```
-
+#### **6. Creating a yaml file
+```bash
+kubectl create deployment my-deployment --image=nginx --dry-run=client -o yaml
+```
+```bash
+kubectl create deployment my-deployment --image=nginx --dry-run=client -o yaml > my-nginx.yaml
+```
 ---
 
 ### **Declarative Commands**
