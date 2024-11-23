@@ -93,6 +93,7 @@
    kubectl expose deployment jenkins --type=NodePort --port=8080 --namespace=cicd
    ```
 ---
+```bash
 apiVersion: v1
 kind: Service
 metadata:
@@ -107,7 +108,7 @@ spec:
     protocol: TCP
     nodePort: 32000    # Specify a NodePort in the range 30000-32767
   type: NodePort       # Service type to expose externally
-
+```
 ---
 
 #### **Step 3: Deploy Nexus**
