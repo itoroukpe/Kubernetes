@@ -30,7 +30,9 @@ Imperative commands are used directly in the command line to manage Kubernetes r
   ```bash
   kubectl set image deployment/my-deployment nginx=nginx:1.21 --record
   ```
-
+```bash
+kubectl get deployment -o wide
+```
 #### **3. Services**
 - **Create a Service**
   ```bash
