@@ -159,7 +159,51 @@
    ```
 
 ---
+Here's the **NodePort** service manifest for the Jenkins deployment defined in your manifest. This will expose the Jenkins application on a specific port that can be accessed externally from the Kubernetes cluster.
 
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  namespace: cicd
+spec:
+  type: NodePort
+  selector:
+    app: jenkins
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080 # NodePort range is typically 30000–32767
+    - protocol: TCP
+      port: 50000
+      targetPort: 50000
+      nodePort: 30050 # Exposing Jenkins agent port
+```
+
+### Explanation:
+- **`type: NodePort`**: Specifies the service type as NodePort, making the service accessible from outside the cluster via `<NodeIP>:NodePort`.
+- **`selector: app: jenkins`**: Matches the Pods created by the Jenkins Deployment to route traffic to them.
+- **`port`**: The port exposed by the service.
+- **`targetPort`**: The port on the Pod where the application is running (as defined in the Deployment).
+- **`nodePort`**: A manually specified NodePort (optional, Kubernetes can assign a random NodePort if omitted) within the range 30000–32767.
+
+### Apply the Service Manifest
+1. Save the above YAML into a file, e.g., `jenkins-service.yaml`.
+2. Apply the service to your Kubernetes cluster:
+   ```bash
+   kubectl apply -f jenkins-service.yaml
+   ```
+3. Verify the service:
+   ```bash
+   kubectl get svc -n cicd
+   ```
+
+### Access Jenkins
+Use `<NodeIP>:30080` in your browser to access the Jenkins web interface. Ensure your cluster's firewall settings allow traffic on the NodePort (30080).
+
+---
 #### **Step 4: Deploy SonarQube**
 
 1. Create a Deployment YAML for SonarQube:
